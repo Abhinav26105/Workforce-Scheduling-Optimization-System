@@ -162,8 +162,13 @@ The following concepts have been identified:
 
 A* has been selected as a candidate for cost-aware schedule generation, using:
 
-```text
-f(n) = g(n) + h(n)
+`f(n) = g(n) + h(n)`
+
+where:
+
+* `g(n)` represents the cost accumulated so far (e.g., overtime, preference violations already introduced)
+* `h(n)` represents the estimated cost to complete a fully staffed, constraint-satisfying schedule
+
 ### CSP
 
 Constraint Satisfaction Problem framing is identified as the core technique for:
@@ -176,6 +181,8 @@ Constraint Satisfaction Problem framing is identified as the core technique for:
 ### AO*
 
 AO* was reviewed for cases where a shift requires multiple simultaneously satisfied sub-requirements (AND) versus a choice between alternative qualified staff (OR), but it was not prioritized for the current stage.
+
+---
 
 ## Unit 2 — Adversarial Search
 
@@ -203,6 +210,9 @@ During Month 1, the team:
 * Reviewed literature connecting AI scheduling to CSP formulations, distributed/federated approaches, learned constraints, and staff-fairness perspectives.
 * Studied Minimax and Alpha-Beta pruning for a future controlled, cross-department conflict scenario.
 * Prepared the initial project plan and Month 1 report.
+
+---
+
 ## Challenges Faced
 
 The main challenge was translating a real workforce-scheduling environment — with overlapping human, legal, and operational constraints — into a clean AI search and CSP model without losing important real-world rules.
