@@ -98,36 +98,11 @@ A later stage may connect the scheduling engine to live HR systems and time-and-
 
 Several research papers were reviewed during the initial research phase to ground the project in existing approaches to AI-assisted workforce scheduling.
 
-### 1. AI-Powered Workforce Scheduling and Resource Optimization Across Distributed Cloud Infrastructures (IEEE Xplore, 2025)
-
-This work looks at coordinating workforce scheduling decisions alongside distributed computing resources, which is relevant to understanding how scheduling engines can operate at scale across multiple sites or departments.
-
-### 2. Federated Learning-Enhanced Workforce Scheduling Framework for Distributed Enterprises (IEEE Xplore, 2025)
-
-This paper explores combining learning-based demand prediction with scheduling logic across distributed enterprise units, which supports the project's interest in eventually forecasting shift demand rather than treating it as fixed input.
-
-### 3. OptiTime: AI-Powered Faculty Scheduler for Peak Productivity (IEEE Xplore, 2024)
-
-This paper presents a scheduling system for academic staff that balances multiple constraints (availability, workload, preferences), offering a directly comparable smaller-scale case study for constraint-driven roster generation.
-
-### 4. CP-WSP: A Declarative CP-SAT Framework for Configurable Multi-Constraint Workforce Scheduling (2026)
-
-This paper frames workforce scheduling as a constraint-programming problem solved with a modern CP-SAT solver, enforcing a large set of hard rules (such as rest periods and cross-midnight shifts) as non-negotiable while optimizing soft objectives like workload fairness. Its variable/constraint framing closely matches this project's own CSP formulation of employees, shifts, and rules.
-
-### 5. Constraint Satisfaction Problems for Workforce Management (industry analysis, 2024)
-
-This source explains, at a practical level, how CSP techniques represent employees, shifts, and positions as variables with domains, and how labour rules and skill requirements become constraints — reinforcing the variable–domain–constraint structure adopted for this project.
-
-### 6. Machine Learning and Constraint Programming for Efficient Healthcare Scheduling (2024)
-
-This paper explores learning constraints directly from historical scheduling data rather than hand-coding every rule, which is noted here as a possible future direction once the base CSP model is working.
-
-### 7. Exploring Nurse Perspectives on AI-Based Shift Scheduling for Fairness, Transparency and Work-Life Balance (2024)
-
-This qualitative study reports that staff affected by automated scheduling care strongly about fairness and transparency in how shifts are assigned, not just technical feasibility — a consideration folded into this project's objective of fairness-aware scheduling rather than pure cost minimization.
-
-These findings collectively support the project's core framing: workforce scheduling is a constraint-satisfaction problem at heart, but real deployments must also account for fairness, staff trust, and eventual integration with live organizational data.
-
+### 1. Optimization of Worker Scheduling at Logistics Depots Using Genetic Algorithms and Simulated Annealing · arXiv, 2024
+This research paper focuses on optimizing worker scheduling at logistics depots to reduce labor costs and improve workforce utilization. It uses a 0–1 integer programming model to assign permanent and temporary workers according to staffing requirements. The researchers apply two optimization techniques, Genetic Algorithm (GA) and Simulated Annealing (SA), to find efficient schedules. The results show that the Genetic Algorithm performs better than Simulated Annealing for the given scheduling problem. Overall, the study demonstrates how optimization algorithms can help logistics companies plan workers more efficiently and reduce unnecessary labor requirements.
+### 2. Optimizing Fairness in Production Planning: A Human-Centric Approach to Machine and Workforce Allocation · arXiv, 2025
+ This research paper presents a human-centric production planning approach that aims to improve both manufacturing efficiency and worker fairness. It uses Constraint Programming (CP) to allocate production orders to machines while considering machine capacity, processing time, and deadlines. For workforce allocation, it uses a Markov Decision Process (MDP) that considers worker preferences, experience, resilience, and medical constraints. The study compares Greedy Allocation, Monte Carlo Tree Search (MCTS), and Reinforcement Learning (RL) methods. Results from 16 expert evaluation sessions show that the approach can produce efficient production schedules while improving fairness, worker satisfaction, and preference alignment.
+ 
 ---
 
 ## AI Concepts Identified for Application
