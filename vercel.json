@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "name": "workforce-scheduling-ai",
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "rewrites": [
