@@ -13,8 +13,8 @@ __pycache__/
 dist/
 build/
 
-# Vite / React build output
-frontend/dist/
+# Vite / React build output - dist is committed for Vercel static serving
+# frontend/dist/
 frontend/node_modules/
 
 # Local database and caches
