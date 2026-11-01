@@ -8,11 +8,11 @@ Populates realistic sample data across 4 industries:
 """
 
 from datetime import datetime, timedelta
-from models import get_db, init_db
+from models import init_db, _make_connection
 
 def seed_database():
     init_db()
-    conn = get_db()
+    conn = _make_connection()
     cursor = conn.cursor()
 
     # Clear previous seed

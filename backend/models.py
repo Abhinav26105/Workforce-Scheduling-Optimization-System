@@ -8,20 +8,43 @@ if os.environ.get('VERCEL'):
 else:
     DB_PATH = os.environ.get('DB_PATH', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'workforce.db'))
 
-def get_db():
-    # If on Vercel and database does not exist in /tmp, initialize and seed it
-    if os.environ.get('VERCEL') and (not os.path.exists(DB_PATH) or os.path.getsize(DB_PATH) == 0):
-        init_db()
-        from seed_data import seed_database
-        seed_database()
-
+def _make_connection():
+    """Low-level connection factory — does NOT call init_db to avoid recursion."""
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
+def _needs_init():
+    """Return True if the DB file is missing or empty (no tables yet)."""
+    if not os.path.exists(DB_PATH) or os.path.getsize(DB_PATH) == 0:
+        return True
+    # Quick check: if the industries table exists we consider DB initialised
+    try:
+        conn = _make_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM industries")
+        count = cur.fetchone()[0]
+        conn.close()
+        return count == 0
+    except Exception:
+        return True
+
+def get_db():
+    """Return a database connection, initializing and seeding if necessary."""
+    if _needs_init():
+        init_db()
+        try:
+            from seed_data import seed_database
+            seed_database()
+        except Exception as e:
+            import traceback
+            print("Seed error:", traceback.format_exc())
+    return _make_connection()
+
 def init_db():
-    conn = get_db()
+    """Create all tables using a direct low-level connection (no get_db recursion)."""
+    conn = _make_connection()
     cursor = conn.cursor()
 
     # Industries table
@@ -85,17 +108,17 @@ def init_db():
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         shift_code TEXT UNIQUE NOT NULL,
         name TEXT NOT NULL,
-        shift_type TEXT NOT NULL, -- MORNING, AFTERNOON, NIGHT
+        shift_type TEXT NOT NULL,
         department TEXT NOT NULL,
         industry_id TEXT NOT NULL,
-        date TEXT NOT NULL, -- YYYY-MM-DD
-        start_time TEXT NOT NULL, -- HH:MM
-        end_time TEXT NOT NULL, -- HH:MM
+        date TEXT NOT NULL,
+        start_time TEXT NOT NULL,
+        end_time TEXT NOT NULL,
         duration_hours REAL NOT NULL,
         required_skill_id INTEGER NOT NULL,
         min_proficiency INTEGER NOT NULL DEFAULT 5,
         required_headcount INTEGER NOT NULL DEFAULT 1,
-        difficulty_score REAL NOT NULL DEFAULT 5.0, -- 1.0 to 10.0
+        difficulty_score REAL NOT NULL DEFAULT 5.0,
         FOREIGN KEY (required_skill_id) REFERENCES skills(id),
         FOREIGN KEY (industry_id) REFERENCES industries(id)
     )
@@ -106,8 +129,8 @@ def init_db():
     CREATE TABLE IF NOT EXISTS availabilities (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         employee_id INTEGER NOT NULL,
-        day_of_week INTEGER NOT NULL CHECK (day_of_week BETWEEN 0 AND 6), -- 0=Monday, 6=Sunday
-        preferred_shift_type TEXT NOT NULL DEFAULT 'ANY', -- MORNING, AFTERNOON, NIGHT, ANY, UNAVAILABLE
+        day_of_week INTEGER NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),
+        preferred_shift_type TEXT NOT NULL DEFAULT 'ANY',
         FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE,
         UNIQUE (employee_id, day_of_week)
     )
@@ -118,10 +141,10 @@ def init_db():
     CREATE TABLE IF NOT EXISTS leaves (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         employee_id INTEGER NOT NULL,
-        start_date TEXT NOT NULL, -- YYYY-MM-DD
-        end_date TEXT NOT NULL,   -- YYYY-MM-DD
+        start_date TEXT NOT NULL,
+        end_date TEXT NOT NULL,
         reason TEXT,
-        status TEXT NOT NULL DEFAULT 'APPROVED', -- APPROVED, PENDING, REJECTED
+        status TEXT NOT NULL DEFAULT 'APPROVED',
         FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
     )
     """)
@@ -133,7 +156,7 @@ def init_db():
         shift_id INTEGER NOT NULL,
         employee_id INTEGER NOT NULL,
         date TEXT NOT NULL,
-        is_backup INTEGER NOT NULL DEFAULT 0, -- 0 = Primary, 1 = Backup
+        is_backup INTEGER NOT NULL DEFAULT 0,
         suitability_score REAL NOT NULL,
         certainty_factor REAL NOT NULL,
         absence_risk REAL NOT NULL,
