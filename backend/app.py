@@ -20,6 +20,7 @@ from flask_cors import CORS
 
 # Ensure backend directory is in sys.path
 backend_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(backend_dir)
 if backend_dir not in sys.path:
     sys.path.insert(0, backend_dir)
 
@@ -32,7 +33,8 @@ from ai.expert_system import SchedulingExpertSystem
 from ai.search_algorithms import SearchScheduler
 import ai.statistics as stats_mod
 
-app = Flask(__name__)
+frontend_dist = os.path.join(root_dir, 'frontend', 'dist')
+app = Flask(__name__, static_folder=frontend_dist, static_url_path='')
 CORS(app)
 
 # Helper: fetch all rows as dicts
@@ -944,6 +946,31 @@ def run_automated_tests():
 def reset_seed():
     seed_database()
     return jsonify({'message': 'Database re-seeded successfully with all 4 industries'})
+
+
+# -------------------------------------------------------------
+# 11. FRONTEND STATIC SERVING (FOR VERCEL / PRODUCTION)
+# -------------------------------------------------------------
+@app.route('/')
+@app.route('/<path:path>')
+def serve_frontend(path=''):
+    if path.startswith('api/'):
+        return jsonify({'error': f'API endpoint /{path} not found'}), 404
+        
+    if app.static_folder and os.path.exists(app.static_folder):
+        file_path = os.path.join(app.static_folder, path)
+        if path != "" and os.path.exists(file_path):
+            return send_file(file_path)
+            
+        index_file = os.path.join(app.static_folder, 'index.html')
+        if os.path.exists(index_file):
+            return send_file(index_file)
+            
+    return jsonify({
+        'status': 'Workforce Scheduling Optimization System API is active',
+        'api_docs': '/api/dashboard/stats',
+        'tests': '/api/tests/run'
+    })
 
 
 if __name__ == '__main__':
