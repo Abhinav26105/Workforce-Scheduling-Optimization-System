@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Flask Backend",
+      "type": "shell",
+      "command": "${workspaceFolder}/.tools/python/python.exe backend/app.py",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "group": "servers",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Start React Frontend",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend",
+        "env": {
+          "PATH": "${workspaceFolder}/.tools/node;${env:PATH}"
+        }
+      },
+      "command": "npm.cmd run dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "group": "servers",
+        "reveal": "always"
+      }
+    },
+    {
+      "label": "Run AI Test Suite",
+      "type": "shell",
+      "command": "${workspaceFolder}/.tools/python/python.exe backend/tests/test_ai_engine.py",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always"
+      }
+    }
+  ]
+}

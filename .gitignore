@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+.tools/
+.venv/
+env/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Vite / React build output
+frontend/dist/
+frontend/node_modules/
+
+# Local database and caches
+*.sqlite3
+*.db-journal
+.vercel/
+.env.local
+.DS_Store
+Thumbs.db

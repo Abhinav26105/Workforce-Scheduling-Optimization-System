@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Flask API",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/app.py",
+      "python": "${workspaceFolder}/.tools/python/python.exe",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Python: Run AI Test Suite",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/tests/test_ai_engine.py",
+      "python": "${workspaceFolder}/.tools/python/python.exe",
+      "console": "integratedTerminal"
+    }
+  ]
+}
